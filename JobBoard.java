@@ -231,7 +231,7 @@ public class JobBoard {
         }
 
         // 3. בדיקת מגבלת משרות למגייס (Limit Check)
-        int MAX_JOBS_PER_RECRUITER = 5; // ניתן לשנות לפי הצורך שמוגדר במערכת שלך
+        int MAX_JOBS_PER_RECRUITER = 10; // ניתן לשנות לפי הצורך שמוגדר במערכת שלך
         if (countJobsByUser(currentUser) >= MAX_JOBS_PER_RECRUITER) {
             System.out.println("חרגת ממכסת המשרות המותרת (מקסימום " + MAX_JOBS_PER_RECRUITER + " משרות).");
             return;
