@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class JobBoard {
     private User[] users;
     private Company[] companies;
@@ -41,10 +43,124 @@ public class JobBoard {
         jobs[jobCount++] = new Job("Product Manager", 32000, true, google, defaultRecruiter);
     }
 
-    // רישום משתמש חדש במערכת
-    public boolean registerUser(User user) {
-        // TODO: לממש לוגיקת הוספה למערך ובדיקת כפילויות
-        return false;
+    // --- מתודות עזר לבדיקת תקינות (Validation Helpers) ---
+
+    private boolean isUsernameUnique(String username) {
+        if (username == null || username.trim().isEmpty()) {
+            return false;
+        }
+        for (int i = 0; i < userCount; i++) {
+            if (users[i].getUsername().equals(username)) {
+                return false; // השם כבר קיים במערכת
+            }
+        }
+        return true;
+    }
+
+    private boolean isValidPassword(String password) {
+        if (password == null || password.isEmpty()) {
+            return false;
+        }
+        boolean hasDigit = false;
+        boolean hasSpecial = false;
+
+        for (char c : password.toCharArray()) {
+            if (Character.isDigit(c)) {
+                hasDigit = true;
+            }
+            if (c == '%' || c == '$' || c == '_') {
+                hasSpecial = true;
+            }
+        }
+        return hasDigit && hasSpecial;
+    }
+
+    private boolean isValidEmail(String email) {
+        if (email == null || email.isEmpty()) {
+            return false;
+        }
+        int atIndex = email.indexOf('@');
+        if (atIndex == -1) {
+            return false;
+        }
+        int dotIndex = email.indexOf('.', atIndex); // מחפש נקודה שמופיעה רק אחרי ה-@
+        return dotIndex > atIndex;
+    }
+
+    private boolean isValidPhone(String phone) {
+        if (phone == null) {
+            return false;
+        }
+        return phone.matches("05\\d{8}");
+    }
+
+    // --- רישום משתמש חדש במערכת אינטראקטיבי (REQ-001) ---
+    public void createUser() {
+        if (userCount >= users.length) {
+            System.out.println("שגיאה: המערכת מלאה, לא ניתן לרשום משתמשים חדשים.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        String username, password, email, phone;
+        boolean isRecruiter = false;
+
+        System.out.println("\n=== הרשמה למערכת ===");
+
+        while (true) {
+            System.out.print("הכנס שם משתמש: ");
+            username = scanner.nextLine().trim();
+            if (isUsernameUnique(username)) {
+                break;
+            }
+            System.out.println("שגיאה: שם המשתמש ריק או שכבר קיים במערכת. אנא בחר שם אחר.");
+        }
+
+        while (true) {
+            System.out.print("הכנס סיסמה (חובה ספרה ותו מיוחד מתוך % $ _): ");
+            password = scanner.nextLine().trim();
+            if (isValidPassword(password)) {
+                break;
+            }
+            System.out.println("שגיאה: הסיסמה חלשה מדי. חובה לכלול לפחות ספרה אחת ותו מיוחד (% $ _).");
+        }
+
+        while (true) {
+            System.out.print("הכנס כתובת דוא\"ל: ");
+            email = scanner.nextLine().trim();
+            if (isValidEmail(email)) {
+                break;
+            }
+            System.out.println("שגיאה: כתובת הדוא\"ל אינה תקינה.");
+        }
+
+        while (true) {
+            System.out.print("הכנס מספר טלפון (10 ספרות, מתחיל ב-05): ");
+            phone = scanner.nextLine().trim();
+            if (isValidPhone(phone)) {
+                break;
+            }
+            System.out.println("שגיאה: מספר הטלפון אינו בפורמט התקין.");
+        }
+
+        while (true) {
+            System.out.print("האם אתה נרשם כמגייס? (כן/לא): ");
+            String accountType = scanner.nextLine().trim();
+            if (accountType.equals("כן")) {
+                isRecruiter = true;
+                break;
+            } else if (accountType.equals("לא")) {
+                isRecruiter = false;
+                break;
+            }
+            System.out.println("שגיאה: אנא ענה ב-'כן' או 'לא'.");
+        }
+
+        User newUser = new User(username, password, email, phone, isRecruiter);
+        users[userCount] = newUser;
+        userCount++;
+
+        System.out.println("\nמזל טוב " + username + "! החשבון נוצר בהצלחה.");
     }
 
     // התחברות למערכת (אימות שם משתמש וסיסמה)
