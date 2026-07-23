@@ -242,6 +242,18 @@ public class JobBoard {
         return count;
     }
 
+    private Company findCompanyByName(String companyName) {
+        // עוברים על המערך רק עד לכמות החברות בפועל (companyCount)
+        for (int i = 0; i < companyCount; i++) {
+            // התעלמות מאותיות גדולות/קטנות בעזרת equalsIgnoreCase
+            if (companies[i].getName().equalsIgnoreCase(companyName)) {
+                return companies[i];
+            }
+        }
+        // אם הלולאה הסתיימה ולא מצאנו כלום
+        return null;
+    }
+
     // --- Getters זמניים למקרה שנצטרך לבדוק את הגדלים של המערכים מבחוץ ---
     public int getUserCount() { return userCount; }
     public int getCompanyCount() { return companyCount; }
