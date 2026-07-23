@@ -217,10 +217,63 @@ public class JobBoard {
         return null;
     }
 
-    // הוספת משרה חדשה למערכת
-    public boolean addNewJob(Job job) {
-        // TODO: לממש לוגיקת הוספת משרה וקידום המונה
-        return false;
+    public void addNewJob(User currentUser) {
+        // 1. בדיקת הרשאות (Validation) - חסימת מחפשי עבודה
+        if (!currentUser.isRecruiter()) {
+            System.out.println("רק מגייסים יכולים לפרסם משרות.");
+            return;
+        }
+
+        // 2. בדיקת מקום במערך
+        if (jobCount >= jobs.length) {
+            System.out.println("לוח המשרות מלא. לא ניתן לפרסם משרות חדשות כרגע.");
+            return;
+        }
+
+        // 3. בדיקת מגבלת משרות למגייס (Limit Check)
+        int MAX_JOBS_PER_RECRUITER = 5; // ניתן לשנות לפי הצורך שמוגדר במערכת שלך
+        if (countJobsByUser(currentUser) >= MAX_JOBS_PER_RECRUITER) {
+            System.out.println("חרגת ממכסת המשרות המותרת (מקסימום " + MAX_JOBS_PER_RECRUITER + " משרות).");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+
+        // 4. בחירת חברה (Company Selection) מהלולאה שיצרנו במשימה 2
+        Company selectedCompany = null;
+        while (selectedCompany == null) {
+            System.out.println("הזן את שם החברה עבורה תפורסם המשרה:");
+            String inputName = scanner.nextLine();
+
+            selectedCompany = findCompanyByName(inputName);
+
+            if (selectedCompany == null) {
+                System.out.println("החברה לא קיימת במערכת, נסה שוב.");
+            }
+        }
+
+        // 5. קליטת נתונים (Data Collection)
+        System.out.println("הזן את כותרת המשרה:");
+        String title = scanner.nextLine();
+
+        System.out.println("הזן שכר חודשי:");
+        int salary = scanner.nextInt();
+        scanner.nextLine(); // ניקוי ה-Buffer אחרי קליטת int
+
+        System.out.println("האם מדובר במשרה מלאה? (הקש true למשרה מלאה או false למשרה חלקית):");
+        boolean isFullTime = scanner.nextBoolean();
+        scanner.nextLine(); // ניקוי ה-Buffer אחרי קליטת boolean
+
+        // 6. יצירת ושמירת האובייקט (Instantiation & Insertion)
+        // שים לב: ודא שסדר הפרמטרים כאן תואם במדויק לבנאי (Constructor) במחלקת Job שלך
+        boolean isOpen = true;
+        Job newJob = new Job(title, salary, isFullTime, isOpen, selectedCompany, currentUser);
+
+        jobs[jobCount] = newJob; // שמירה במיקום המדויק ללא דריסת נתונים
+        jobCount++;              // קידום המונה
+
+        // 7. סיום
+        System.out.println("המשרה פורסמה בהצלחה!");
     }
 
     // הדפסת כל המשרות הקיימות במערכת
