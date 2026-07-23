@@ -192,28 +192,29 @@ public class JobBoard {
     public User login() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("\n=== התחברות למערכת ===");
+        // --- משימה קודמת: קליטת הנתונים ---
+        System.out.println("--- התחברות למערכת ---");
 
-        // 1. בקש מהמשתמש להקליד שם משתמש (בקשה חד פעמית)
-        System.out.print("הכנס שם משתמש: ");
-        String usernameInput = scanner.nextLine();
+        System.out.print("הזן שם משתמש: ");
+        String inputUsername = scanner.nextLine().trim();
 
-        // 2. בקש מהמשתמש להקליד סיסמה
-        System.out.print("הכנס סיסמה: ");
-        String passwordInput = scanner.nextLine();
+        System.out.print("הזן סיסמה: ");
+        String inputPassword = scanner.nextLine().trim();
 
-        // 3. עבור בלולאה על כל המשתמשים במערך (עד userCount)
+        // --- משימה נוכחית: חיפוש ואימות במערך ---
         for (int i = 0; i < userCount; i++) {
-            // 4. אם שם המשתמש תואם וגם checkPassword מחזיר true
-            if (users[i].getUsername().equals(usernameInput) && users[i].checkPassword(passwordInput)) {
-                System.out.println("התחברות בוצעה בהצלחה!");
-                return users[i]; // החזר את אובייקט ה-User (התחברות מוצלחת)
+            User currentUser = users[i];
+
+            // בדיקת התאמה גם לשם המשתמש וגם לסיסמה
+            if (currentUser.getUsername().equals(inputUsername) && currentUser.checkPassword(inputPassword)) {
+                System.out.println("התחברת בהצלחה!");
+                return currentUser; // מחזיר את המשתמש ויוצא מהפעולה
             }
         }
 
-        // 5. אם הלולאה הסתיימה ולא נמצאה התאמה
-        System.out.println("שגיאה: שם משתמש או סיסמה שגויים.");
-        return null; // 6. החזר null במקרה של שגיאה
+        // אם הלולאה הסתיימה ולא הוחזר משתמש - סימן שאין התאמה
+        System.out.println("שם משתמש או סיסמה שגויים");
+        return null;
     }
 
     // הוספת משרה חדשה למערכת
