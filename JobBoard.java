@@ -95,7 +95,9 @@ public class JobBoard {
     }
 
     // --- רישום משתמש חדש במערכת אינטראקטיבי (REQ-001) ---
+    // --- רישום משתמש חדש במערכת אינטראקטיבי (REQ-001) ---
     public void createUser() {
+        // בדיקת מקום במערך
         if (userCount >= users.length) {
             System.out.println("שגיאה: המערכת מלאה, לא ניתן לרשום משתמשים חדשים.");
             return;
@@ -107,15 +109,17 @@ public class JobBoard {
 
         System.out.println("\n=== הרשמה למערכת ===");
 
+        // קליטת שם משתמש (Loop)
         while (true) {
             System.out.print("הכנס שם משתמש: ");
             username = scanner.nextLine().trim();
             if (isUsernameUnique(username)) {
                 break;
             }
-            System.out.println("שגיאה: שם המשתמש ריק או שכבר קיים במערכת. אנא בחר שם אחר.");
+            System.out.println("שגיאה: שם המשתמש ריק או שכבר תפוס, נסה שוב.");
         }
 
+        // קליטת סיסמה (Loop)
         while (true) {
             System.out.print("הכנס סיסמה (חובה ספרה ותו מיוחד מתוך % $ _): ");
             password = scanner.nextLine().trim();
@@ -125,42 +129,49 @@ public class JobBoard {
             System.out.println("שגיאה: הסיסמה חלשה מדי. חובה לכלול לפחות ספרה אחת ותו מיוחד (% $ _).");
         }
 
+        // קליטת אימייל (Loop)
         while (true) {
             System.out.print("הכנס כתובת דוא\"ל: ");
             email = scanner.nextLine().trim();
             if (isValidEmail(email)) {
                 break;
             }
-            System.out.println("שגיאה: כתובת הדוא\"ל אינה תקינה.");
+            System.out.println("שגיאה: כתובת הדוא\"ל אינה תקינה, נסה שוב.");
         }
 
+        // קליטת טלפון (Loop)
         while (true) {
             System.out.print("הכנס מספר טלפון (10 ספרות, מתחיל ב-05): ");
             phone = scanner.nextLine().trim();
             if (isValidPhone(phone)) {
                 break;
             }
-            System.out.println("שגיאה: מספר הטלפון אינו בפורמט התקין.");
+            System.out.println("שגיאה: מספר הטלפון אינו בפורמט התקין, נסה שוב.");
         }
 
+        // קביעת סוג חשבון
         while (true) {
-            System.out.print("האם אתה נרשם כמגייס? (כן/לא): ");
-            String accountType = scanner.nextLine().trim();
-            if (accountType.equals("כן")) {
+            System.out.print("הקש 1 אם אתה מגייס, 2 אם אתה מחפש עבודה: ");
+            String choice = scanner.nextLine().trim();
+            if (choice.equals("1")) {
                 isRecruiter = true;
                 break;
-            } else if (accountType.equals("לא")) {
+            } else if (choice.equals("2")) {
                 isRecruiter = false;
                 break;
             }
-            System.out.println("שגיאה: אנא ענה ב-'כן' או 'לא'.");
+            System.out.println("שגיאה: אנא הקש 1 או 2.");
         }
 
+        // יצירת ושמירת האובייקט
         User newUser = new User(username, password, email, phone, isRecruiter);
         users[userCount] = newUser;
+
+        // קידום המונה
         userCount++;
 
-        System.out.println("\nמזל טוב " + username + "! החשבון נוצר בהצלחה.");
+        // סיום
+        System.out.println("\nהחשבון נוצר בהצלחה!");
     }
 
     // התחברות למערכת (אימות שם משתמש וסיסמה)
