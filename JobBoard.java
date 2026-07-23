@@ -189,10 +189,31 @@ public class JobBoard {
         System.out.println("===============================\n");
     }
 
-    // התחברות למערכת (אימות שם משתמש וסיסמה)
-    public User login(String username, String password) {
-        // TODO: לממש לוגיקת סריקה במערך והתאמת סיסמה
-        return null;
+    public User login() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("\n=== התחברות למערכת ===");
+
+        // 1. בקש מהמשתמש להקליד שם משתמש (בקשה חד פעמית)
+        System.out.print("הכנס שם משתמש: ");
+        String usernameInput = scanner.nextLine();
+
+        // 2. בקש מהמשתמש להקליד סיסמה
+        System.out.print("הכנס סיסמה: ");
+        String passwordInput = scanner.nextLine();
+
+        // 3. עבור בלולאה על כל המשתמשים במערך (עד userCount)
+        for (int i = 0; i < userCount; i++) {
+            // 4. אם שם המשתמש תואם וגם checkPassword מחזיר true
+            if (users[i].getUsername().equals(usernameInput) && users[i].checkPassword(passwordInput)) {
+                System.out.println("התחברות בוצעה בהצלחה!");
+                return users[i]; // החזר את אובייקט ה-User (התחברות מוצלחת)
+            }
+        }
+
+        // 5. אם הלולאה הסתיימה ולא נמצאה התאמה
+        System.out.println("שגיאה: שם משתמש או סיסמה שגויים.");
+        return null; // 6. החזר null במקרה של שגיאה
     }
 
     // הוספת משרה חדשה למערכת
