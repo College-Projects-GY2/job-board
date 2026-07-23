@@ -174,6 +174,21 @@ public class JobBoard {
         System.out.println("\nהחשבון נוצר בהצלחה!");
     }
 
+    public void printAllUsers() {
+        System.out.println("\n=== רשימת המשתמשים במערכת ===");
+
+        if (userCount == 0) {
+            System.out.println("אין כרגע משתמשים רשומים במערכת.");
+            return;
+        }
+
+        // עוברים בלולאה רק עד userCount, כדי לא לנסות להדפיס תאים ריקים (null)
+        for (int i = 0; i < userCount; i++) {
+            System.out.println((i + 1) + ". " + users[i].toString());
+        }
+        System.out.println("===============================\n");
+    }
+
     // התחברות למערכת (אימות שם משתמש וסיסמה)
     public User login(String username, String password) {
         // TODO: לממש לוגיקת סריקה במערך והתאמת סיסמה
