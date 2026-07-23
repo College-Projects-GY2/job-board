@@ -61,4 +61,22 @@ public class User {
                 ", טלפון: " + phone +
                 ", סוג: " + role;
     }
+
+}
+
+    @Override
+    public String toString() {
+        String accountType = isRecruiter ? "מגייס" : "מחפש עבודה";
+        return "User: [" + username + "] | Email: " + email + " | Phone: " + phone + " | Type: " + accountType;
+    }
+
+    // פעולה המאמתת סיסמה מבלי לחשוף אותה החוצה
+    public boolean checkPassword(String inputPassword) {
+        return this.password.equals(inputPassword);
+    }
+
+    // אם עדיין אין לך, תצטרך גם Getter לשם המשתמש כדי למצוא אותו במערך
+    public String getUsername() {
+        return this.username;
+    }
 }
