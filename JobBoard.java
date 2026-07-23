@@ -94,6 +94,55 @@ public class JobBoard {
         return phone.matches("05\\d{8}");
     }
 
+    public void start() {
+        Scanner scanner = new Scanner(System.in);
+        boolean running = true;
+
+        // לולאה חיצונית (תפריט ראשי)
+        while (running) {
+            System.out.println("\n=== לוח דרושים - תפריט ראשי ===");
+            System.out.println("1. הרשמה למערכת (Register)");
+            System.out.println("2. התחברות (Login)");
+            System.out.println("3. יציאה מהתוכנית (Exit)");
+            System.out.println("בחר אפשרות:");
+
+            // בדיקה שנקלט מספר תקין כדי למנוע קריסה מנתונים שגויים
+            if (!scanner.hasNextInt()) {
+                System.out.println("שגיאה: יש להזין מספר שלם בלבד.");
+                scanner.next(); // ניקוי הקלט השגוי
+                continue;
+            }
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // ניקוי ה-Buffer
+
+            switch (choice) {
+                case 1:
+                    // הרשמה למערכת (בהנחה שקיימת מתודה כזו שמנהלת את רשימת המשתמשים, או createUser)
+                    // לדוגמה: createUser();
+                    System.out.println("פעולת הרשמה תופעל כאן.");
+                    break;
+
+                case 2:
+                    // התחברות למערכת
+                    // User loggedInUser = login();
+                    // אם ההתחברות הצליחה והחזירה משתמש, ניכנס ללולאה הפנימית (בטסק הבא)
+                    System.out.println("פעולת התחברות תופעל כאן.");
+                    break;
+
+                case 3:
+                    // יציאה מהתוכנית
+                    System.out.println("תודה שהשתמשת בלוח הדרושים, להתראות!");
+                    running = false;
+                    break;
+
+                default:
+                    System.out.println("בחירה שגויה, אנא בחר מספר מהתפריט (1-3).");
+                    break;
+            }
+        }
+    }
+
     // --- רישום משתמש חדש במערכת אינטראקטיבי (REQ-001) ---
     // --- רישום משתמש חדש במערכת אינטראקטיבי (REQ-001) ---
     public void createUser() {
