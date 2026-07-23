@@ -13,16 +13,16 @@ public class User {
         this.isRecruiter = isRecruiter;
     }
 
+    public boolean checkPassword(String inputPassword) {
+        return this.password.equals(inputPassword);
+    }
+
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setPassword(String password) {
@@ -50,8 +50,19 @@ public class User {
     }
 
     public void setRecruiter(boolean recruiter) {
-        isRecruiter = recruiter;
+        this.isRecruiter = recruiter;
     }
+
+    @Override
+    public String toString() {
+        String role = this.isRecruiter ? "מגייס" : "מחפש עבודה";
+        return "שם משתמש: " + username +
+                ", דוא\"ל: " + email +
+                ", טלפון: " + phone +
+                ", סוג: " + role;
+    }
+
+}
 
     @Override
     public String toString() {

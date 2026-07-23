@@ -4,6 +4,7 @@ public class JobBoard {
     private User[] users;
     private Company[] companies;
     private Job[] jobs;
+
     private int userCount;
     private int companyCount;
     private int jobCount;
@@ -12,14 +13,17 @@ public class JobBoard {
         this.users = new User[100];
         this.companies = new Company[50];
         this.jobs = new Job[200];
+
+
         this.userCount = 0;
         this.companyCount = 0;
         this.jobCount = 0;
+
         loadMockData();
     }
 
     private void loadMockData() {
-        User defaultRecruiter = new User("admin_hr", "password123", "hr@jobboard.com", "050-1234567", true);
+        User defaultRecruiter = new User("admin_hr", "Pass123!", "hr@jobboard.com", "0501234567", true);
         users[userCount++] = defaultRecruiter;
 
         Company google = new Company("Google", "High-Tech", 150000);
@@ -30,7 +34,7 @@ public class JobBoard {
         companies[companyCount++] = intel;
         companies[companyCount++] = amazon;
 
-        // 3. יצירת 10 משרות התחלתיות והכנסתן למערך (תוך קידום המונה)
+        // 3. יצירת 10 משרות התחלתיות והכנסתן למערך (שים לב לקידום המונה jobCount++)
         jobs[jobCount++] = new Job("Java Developer", 25000, true, google, defaultRecruiter);
         jobs[jobCount++] = new Job("Python Intern", 12000, false, google, defaultRecruiter);
         jobs[jobCount++] = new Job("Hardware Engineer", 28000, true, intel, defaultRecruiter);
@@ -43,6 +47,29 @@ public class JobBoard {
         jobs[jobCount++] = new Job("Product Manager", 32000, true, google, defaultRecruiter);
     }
 
+
+    // מתודה לרישום משתמש
+    public boolean createUser(User newUser) {
+        // TODO: לממש לוגיקת רישום (בדיקת כפילויות, הוספה למערך וקידום מונה)
+        return false;
+    }
+
+    // מתודה להתחברות
+    public User login(String username, String password) {
+        // TODO: לממש לוגיקת התחברות (חיפוש במערך ואימות סיסמה)
+        return null;
+    }
+
+    // מתודה להוספת משרה
+    public boolean addNewJob(Job job) {
+        // TODO: לממש לוגיקת הוספת משרה למערך וקידום המונה
+        return false;
+    }
+
+    // מתודה להדפסת כל המשרות
+    public void printAllJobs() {
+        // TODO: לממש לולאה שעוברת על מערך המשרות ומדפיסה אותן
+=======
     // --- מתודות עזר לבדיקת תקינות (Validation Helpers) ---
 
     private boolean isUsernameUnique(String username) {
@@ -587,9 +614,4 @@ public class JobBoard {
         // אם הלולאה הסתיימה ולא מצאנו כלום
         return null;
     }
-
-    // --- Getters זמניים למקרה שנצטרך לבדוק את הגדלים של המערכים מבחוץ ---
-    public int getUserCount() { return userCount; }
-    public int getCompanyCount() { return companyCount; }
-    public int getJobCount() { return jobCount; }
 }
