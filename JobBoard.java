@@ -337,6 +337,29 @@ public class JobBoard {
         }
     }
 
+    public void printUserJobs(User currentUser) {
+        // 1. הכנה ומעקב האם נמצאו משרות של המשתמש
+        boolean hasJobs = false;
+
+        // 2. כותרת תצוגה
+        System.out.println("\n--- המשרות שפרסמת ---");
+
+        // 3. לולאת חיפוש שרצה מ-0 ועד jobCount
+        for (int i = 0; i < jobCount; i++) {
+            // 4. בדיקת שיוך - האם המפרסם של המשרה הנוכחית הוא המשתמש המחובר
+            if (jobs[i].getPublisher().getUsername().equals(currentUser.getUsername())) {
+                System.out.println((i + 1) + ". " + jobs[i]);
+                System.out.println("-------------------------");
+                hasJobs = true; // סימון שמצאנו לפחות משרה אחת
+            }
+        }
+
+        // 5. טיפול במצב שבו אין משרות למשתמש
+        if (!hasJobs) {
+            System.out.println("טרם פרסמת משרות במערכת.");
+        }
+    }
+
     private int countJobsByUser(User user) {
         int count = 0;
 
