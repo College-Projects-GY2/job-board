@@ -228,6 +228,20 @@ public class JobBoard {
         // TODO: לממש לולאה הרצה על מערך המשרות ומדפיסה אותן
     }
 
+    private int countJobsByUser(User user) {
+        int count = 0;
+
+        // מעבר רק עד jobCount כדי למנוע קריסת NullPointerException בתאים ריקים
+        for (int i = 0; i < jobCount; i++) {
+            // השוואה בטוחה בין המחרוזות של שמות המשתמשים
+            if (jobs[i].getPublisher().getUsername().equals(user.getUsername())) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
     // --- Getters זמניים למקרה שנצטרך לבדוק את הגדלים של המערכים מבחוץ ---
     public int getUserCount() { return userCount; }
     public int getCompanyCount() { return companyCount; }
