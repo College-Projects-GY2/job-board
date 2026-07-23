@@ -276,6 +276,49 @@ public class JobBoard {
         System.out.println("המשרה פורסמה בהצלחה!");
     }
 
+    public void removeJob(User currentUser) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("--- מחיקת משרה ---");
+        System.out.println("הזן את כותרת המשרה שברצונך למחוק:");
+        String targetTitle = scanner.nextLine().trim();
+
+        int indexToRemove = -1;
+
+        // 1. חיפוש המשרה במערך
+        for (int i = 0; i < jobCount; i++) {
+            if (jobs[i].getTitle().equalsIgnoreCase(targetTitle)) {
+                indexToRemove = i;
+                break;
+            }
+        }
+
+        // בדיקה האם המשרה קיימת
+        if (indexToRemove == -1) {
+            System.out.println("שגיאה: משרה בשם זה לא נמצאה במערכת.");
+            return;
+        }
+
+        // 2. בדיקת בעלות קריטית (אבטחה) - האם המשתמש המחובר הוא אכן המפרסם?
+        if (!jobs[indexToRemove].getPublisher().getUsername().equals(currentUser.getUsername())) {
+            System.out.println("שגיאה: אינך מורשה למחוק משרה שפורסמה על ידי משתמש אחר.");
+            return;
+        }
+
+        // 3. ביצוע הזזת המערך (Array Shift) שמאלה
+        // הלולאה רצה מאינדקס המשרה שנמחקה ועד לפני האיבר האחרון במערך
+        for (int i = indexToRemove; i < jobCount - 1; i++) {
+            jobs[i] = jobs[i + 1];
+        }
+
+        // 4. ניקוי התא האחרון שהתפנה והפחתת המונה
+        jobs[jobCount - 1] = null;
+        jobCount--;
+
+        // 5. סיום בהצלחה
+        System.out.println("המשרה נמחקה מהמכת.");
+    }
+
     // הדפסת כל המשרות הקיימות במערכת
     public void printAllJobs() {
         // TODO: לממש לולאה הרצה על מערך המשרות ומדפיסה אותן
