@@ -327,6 +327,33 @@ public class JobBoard {
         System.out.println("המשרה נמחקה מהמערכת.");
     }
 
+
+    public void promptSearchParameters() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("--- חיפוש משרות מתקדם ---");
+        System.out.println("(הקש -999 בכל שלב כדי לדלג על סינון מסוים)");
+
+        // 1. קליטת תחום
+        System.out.println("הזן תחום לחיפוש (או -999 לדלג):");
+        String searchField = scanner.nextLine().trim();
+
+        // 2. קליטת שכר מינימום
+        System.out.println("הזן שכר מינימלי לחיפוש (או -999 לדלג):");
+        int minSalary = scanner.nextInt();
+
+        // 3. קליטת שכר מקסימום
+        System.out.println("הזן שכר מקסימלי לחיפוש (או -999 לדלג):");
+        int maxSalary = scanner.nextInt();
+        scanner.nextLine(); // ניקוי ה-Buffer אחרי ה-int
+
+        // 4. קליטת סטטוס משרה
+        System.out.println("הקש true למשרות פתוחות בלבד, false לסגורות, או -999 לדלג:");
+        String statusInput = scanner.nextLine().trim();
+
+        System.out.println("הנתונים נקלטו בהצלחה ומוכנים ללוגיקת הסינון.");
+    }
+
     public Job[] searchJobs() {
         Scanner scanner = new Scanner(System.in);
 
