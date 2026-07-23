@@ -327,6 +327,79 @@ public class JobBoard {
         System.out.println("המשרה נמחקה מהמערכת.");
     }
 
+    public Job[] searchJobs() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("--- חיפוש וסינון משרות ---");
+        System.out.println("(הקש -999 כדי לדלג על כל סינון שתרצה)");
+
+        // 1. קליטת פרמטרי הסינון
+        System.out.println("הזן תחום לחיפוש (או -999 לדלג):");
+        String fieldInput = scanner.nextLine().trim();
+
+        System.out.println("הזן שכר מינימלי (או -999 לדלג):");
+        int minSalary = scanner.nextInt();
+
+        System.out.println("הזן שכר מקסימלי (או -999 לדלג):");
+        int maxSalary = scanner.nextInt();
+
+        System.out.println("האם המשרה פתוחה? (הקש true / false, או -999 לדלג):");
+        // מכיוון ש-nextBoolean לא יודע לקבל -999 ישירות כמספר, נקלוט כמחרוזת ונמיר או נטפל בזה
+        String statusStr = scanner.next();
+        scanner.nextLine(); // ניקוי ה-Buffer
+
+        // 2. יצירת מערך תוצאות זמני בגודל המקסימלי האפשרי (jobCount) ומונה תוצאות
+        Job[] results = new Job[jobCount];
+        int resCount = 0;
+
+        // 3. לולאת מעבר על כל המשרות הפעילות בלוח
+        for (int i = 0; i < jobCount; i++) {
+            Job currentJob = jobs[i];
+            boolean matches = true; // נניח כברירת מחדל שהיא מתאימה
+
+            // בדיקת תחום (בהנחה שיש למחלקת Job מתודה כמו getField() או דומה, נא להתאים לשדה הקיים אצלך)
+            // אם המשתמש לא דילג (-999) והתחום לא תואם
+            if (!fieldInput.equals("-999")) {
+                // הערה: ודא ששם המתודה לשליפת התחום במחלקת Job תואם לקוד שלך (למשל getField או getTitle)
+                // לצורך הדוגמה נניח שבודקים מול כותרת או תחום אם קיים. אם אין שדה תחום נפרד, נשווה לכותרת או נתאים לפי המחלקה שלך.
+            }
+
+            // בדיקת שכר מינימלי
+            if (minSalary != -999 && currentJob.getSalary() < minSalary) {
+                matches = false;
+            }
+
+            // בדיקת שכר מקסימלי
+            if (maxSalary != -999 && currentJob.getSalary() > maxSalary) {
+                matches = false;
+            }
+
+            // בדיקת סטטוס פתוחה/סגורה
+            if (!statusStr.equals("-999")) {
+                boolean targetStatus = Boolean.parseBoolean(statusStr);
+                // בהנחה שיש מתודה isOpen() במחלקת Job
+                if (currentJob.isOpen() != targetStatus) {
+                    matches = false;
+                }
+            }
+
+            // אם המשרה עברה את כל התנאים (AND)
+            if (matches) {
+                results[resCount] = currentJob;
+                resCount++;
+                System.out.println("\n--- תוצאה נמצאה ---");
+                System.out.println(currentJob);
+            }
+        }
+
+        // 4. בדיקה האם נמצאו תוצאות בכלל
+        if (resCount == 0) {
+            System.out.println("לא נמצאו משרות התואמות לחיפוש.");
+        }
+
+        return results;
+    }
+
     public void printAllJobs() {
         // 1. בדיקת לוח ריק (Empty State Check)
         if (jobCount == 0) {
