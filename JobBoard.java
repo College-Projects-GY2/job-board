@@ -277,15 +277,24 @@ public class JobBoard {
     }
 
     public void removeJob(User currentUser) {
+        // 1. בדיקה מקדימה: האם למשתמש יש בכלל משרות באוויר?
+        if (countJobsByUser(currentUser) == 0) {
+            System.out.println("אין לך משרות באוויר שניתן למחוק.");
+            return;
+        }
+
+        // 2. הצגת המשרות הפעילות של המשתמש בלבד לפני קליטת הקלט
+        printUserJobs(currentUser);
+
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("--- מחיקת משרה ---");
-        System.out.println("הזן את כותרת המשרה שברצונך למחוק:");
+        System.out.println("\n--- מחיקת משרה ---");
+        System.out.println("הזן את כותרת המשרה שברצונך למחוק מתוך הרשימה המוצגת:");
         String targetTitle = scanner.nextLine().trim();
 
         int indexToRemove = -1;
 
-        // 1. חיפוש המשרה במערך
+        // 3. חיפוש המשרה במערך הכללי
         for (int i = 0; i < jobCount; i++) {
             if (jobs[i].getTitle().equalsIgnoreCase(targetTitle)) {
                 indexToRemove = i;
@@ -299,24 +308,23 @@ public class JobBoard {
             return;
         }
 
-        // 2. בדיקת בעלות קריטית (אבטחה) - האם המשתמש המחובר הוא אכן המפרסם?
+        // 4. בדיקת בעלות קריטית (אבטחה) - האם המשתמש המחובר הוא אכן המפרסם?
         if (!jobs[indexToRemove].getPublisher().getUsername().equals(currentUser.getUsername())) {
             System.out.println("שגיאה: אינך מורשה למחוק משרה שפורסמה על ידי משתמש אחר.");
             return;
         }
 
-        // 3. ביצוע הזזת המערך (Array Shift) שמאלה
-        // הלולאה רצה מאינדקס המשרה שנמחקה ועד לפני האיבר האחרון במערך
+        // 5. ביצוע הזזת המערך (Array Shift) שמאלה
         for (int i = indexToRemove; i < jobCount - 1; i++) {
             jobs[i] = jobs[i + 1];
         }
 
-        // 4. ניקוי התא האחרון שהתפנה והפחתת המונה
+        // 6. ניקוי התא האחרון שהתפנה והפחתת המונה
         jobs[jobCount - 1] = null;
         jobCount--;
 
-        // 5. סיום בהצלחה
-        System.out.println("המשרה נמחקה מהמכת.");
+        // 7. סיום בהצלחה
+        System.out.println("המשרה נמחקה מהמערכת.");
     }
 
     public void printAllJobs() {
