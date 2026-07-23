@@ -52,4 +52,10 @@ public class User {
     public void setRecruiter(boolean recruiter) {
         isRecruiter = recruiter;
     }
+
+    @Override
+    public String toString() {
+        String accountType = isRecruiter ? "מגייס" : "מחפש עבודה";
+        return "User: [" + username + "] | Email: " + email + " | Phone: " + phone + " | Type: " + accountType;
+    }
 }
