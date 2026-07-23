@@ -319,9 +319,22 @@ public class JobBoard {
         System.out.println("המשרה נמחקה מהמכת.");
     }
 
-    // הדפסת כל המשרות הקיימות במערכת
     public void printAllJobs() {
-        // TODO: לממש לולאה הרצה על מערך המשרות ומדפיסה אותן
+        // 1. בדיקת לוח ריק (Empty State Check)
+        if (jobCount == 0) {
+            System.out.println("אין כרגע משרות מפורסמות במערכת.");
+            return;
+        }
+
+        // 2. כותרת תצוגה
+        System.out.println("\n--- רשימת המשרות הפנויות ---");
+
+        // 3. לולאת הדפסה שרצה אך ורק עד jobCount כדי למנוע NullPointerException
+        for (int i = 0; i < jobCount; i++) {
+            // הדפסת מספר סידורי ואת אובייקט המשרה (שמפעיל אוטומטית את toString)
+            System.out.println((i + 1) + ". " + jobs[i]);
+            System.out.println("-------------------------");
+        }
     }
 
     private int countJobsByUser(User user) {
