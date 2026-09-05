@@ -637,6 +637,60 @@ public class JobBoard {
             }
         }
 
+
+        public void viewMyApplicants(User recruiter) {
+            // 1. בדיקה האם למגייס יש בכלל משרות באוויר
+            if (countJobsByUser(recruiter) == 0) {
+                System.out.println("טרם פרסמת משרות במערכת ולכן אין לך מועמדים לצפות בהם.");
+                return;
+            }
+
+            // 2. תצוגת המשרות של המגייס בלבד
+            printUserJobs(recruiter);
+
+            // 3. קליטת המשרה שעבורה רוצים לראות מועמדים
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("\n--- צפייה במועמדים ---");
+            System.out.println("הזן את כותרת המשרה שעבורה תרצה לראות את המועמדים:");
+            String targetTitle = scanner.nextLine().trim();
+
+            Job targetJob = null;
+
+            // 4. חיפוש המשרה ובדיקת בעלות (אבטחה)
+            for (int i = 0; i < jobCount; i++) {
+                if (jobs[i].getTitle().equalsIgnoreCase(targetTitle)) {
+                    // בדיקה שהמשרה אכן שייכת למגייס המחובר
+                    if (jobs[i].getPublisher().getUsername().equals(recruiter.getUsername())) {
+                        targetJob = jobs[i];
+                    }
+                    break;
+                }
+            }
+
+            if (targetJob == null) {
+                System.out.println("שגיאה: המשרה לא נמצאה או שאינך המפרסם של משרה זו.");
+                return;
+            }
+
+            // 5. שליפת המועמדים והדפסתם
+            int applicantCount = targetJob.getApplicantCount();
+            User[] applicants = targetJob.getApplicants();
+
+            System.out.println("\n=== רשימת מועמדים למשרה: " + targetJob.getTitle() + " ===");
+
+            if (applicantCount == 0) {
+                System.out.println("אין עדיין מועמדים למשרה זו.");
+            } else {
+                for (int i = 0; i < applicantCount; i++) {
+                    User applicant = applicants[i];
+                    System.out.println((i + 1) + ". שם: " + applicant.getUsername() +
+                            " | דוא\"ל: " + applicant.getEmail() +
+                            " | טלפון: " + applicant.getPhone());
+                    System.out.println("-------------------------------------------------");
+                }
+            }
+        }
+
     private int countJobsByUser(User user) {
         int count = 0;
 
