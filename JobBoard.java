@@ -589,6 +589,54 @@ public class JobBoard {
         }
     }
 
+        public void applyForJob(User seeker) {
+            // 1. בדיקה אם יש בכלל משרות במערכת
+            if (jobCount == 0) {
+                System.out.println("אין כרגע משרות זמינות במערכת.");
+                return;
+            }
+
+            // 2. תצוגת כלל המשרות למשתמש
+            printAllJobs();
+
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("\n--- הגשת מועמדות למשרה ---");
+            System.out.println("הזן את כותרת המשרה אליה תרצה להגיש מועמדות מתוך הרשימה:");
+            String targetTitle = scanner.nextLine().trim();
+
+            Job targetJob = null;
+
+            // 3. חיפוש המשרה במערך
+            for (int i = 0; i < jobCount; i++) {
+                if (jobs[i].getTitle().equalsIgnoreCase(targetTitle)) {
+                    targetJob = jobs[i];
+                    break;
+                }
+            }
+
+            // 4. ולידציות (בדיקות תקינות)
+            if (targetJob == null) {
+                System.out.println("שגיאה: משרה בשם זה לא נמצאה במערכת.");
+                return;
+            }
+
+            if (!targetJob.isOpen()) {
+                System.out.println("שגיאה: המשרה כרגע סגורה ולא ניתן להגיש אליה מועמדות.");
+                return;
+            }
+
+            if (targetJob.getPublisher().getUsername().equals(seeker.getUsername())) {
+                System.out.println("שגיאה: אינך יכול להגיש מועמדות למשרה שאתה פרסמת בעצמך.");
+                return;
+            }
+
+            // 5. ניסיון הוספת המועמד למשרה
+            boolean success = targetJob.addApplicant(seeker);
+            if (success) {
+                System.out.println("מועמדותך למשרה '" + targetTitle + "' הוגשה בהצלחה!");
+            }
+        }
+
     private int countJobsByUser(User user) {
         int count = 0;
 
