@@ -121,117 +121,126 @@ public class JobBoard {
         return phone.matches("05\\d{8}");
     }
 
-    public void start() {
-        Scanner scanner = new Scanner(System.in);
-        boolean running = true;
+        public void start() {
+            Scanner scanner = new Scanner(System.in);
+            boolean running = true;
 
-        // לולאה חיצונית (תפריט ראשי)
-        while (running) {
-            System.out.println("\n=== לוח דרושים - תפריט ראשי ===");
-            System.out.println("1. הרשמה למערכת (Register)");
-            System.out.println("2. התחברות (Login)");
-            System.out.println("3. יציאה מהתוכנית (Exit)");
-            System.out.println("בחר אפשרות:");
+            // לולאה חיצונית (תפריט ראשי)
+            while (running) {
+                System.out.println("\n=== לוח דרושים - תפריט ראשי ===");
+                System.out.println("1. הרשמה למערכת (Register)");
+                System.out.println("2. התחברות (Login)");
+                System.out.println("3. יציאה מהתוכנית (Exit)");
+                System.out.println("בחר אפשרות:");
 
-            if (!scanner.hasNextInt()) {
-                System.out.println("שגיאה: יש להזין מספר שלם בלבד.");
-                scanner.next(); // ניקוי הקלט השגוי
-                continue;
-            }
+                if (!scanner.hasNextInt()) {
+                    System.out.println("שגיאה: יש להזין מספר שלם בלבד.");
+                    scanner.next(); // ניקוי הקלט השגוי
+                    continue;
+                }
 
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // ניקוי ה-Buffer
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // ניקוי ה-Buffer
 
-            switch (choice) {
-                case 1:
-                    // הרשמה למערכת
-                    createUser();
-                    break;
+                switch (choice) {
+                    case 1:
+                        createUser();
+                        break;
 
-                case 2:
-                    // התחברות למערכת
-                    User loggedInUser = login();
+                    case 2:
+                        User loggedInUser = login();
 
-                    // אם ההתחברות הצליחה, נכנסים ללולאה הפנימית
-                    if (loggedInUser != null) {
-                        System.out.println("התחברת בהצלחה! שלום, " + loggedInUser.getUsername());
+                        // אם ההתחברות הצליחה, נכנסים ללולאה הפנימית
+                        if (loggedInUser != null) {
+                            System.out.println("התחברת בהצלחה! שלום, " + loggedInUser.getUsername());
 
-                        // לולאה פנימית למשתמש מחובר
-                        while (loggedInUser != null) {
-                            System.out.println("\n=== תפריט משתמש מחובר ===");
-                            System.out.println("1. צפייה בכל המשרות");
-                            System.out.println("2. חיפוש וסינון משרות");
+                            // לולאה פנימית למשתמש מחובר
+                            while (loggedInUser != null) {
+                                System.out.println("\n=== תפריט משתמש מחובר ===");
+                                System.out.println("1. צפייה בכל המשרות");
+                                System.out.println("2. חיפוש וסינון משרות");
 
-                            // הצגה דינמית של אפשרויות למגייסים בלבד
-                            if (loggedInUser.isRecruiter()) {
-                                System.out.println("3. פרסום משרה חדשה");
-                                System.out.println("4. צפייה במשרות שלי");
-                                System.out.println("5. מחיקת משרה");
-                            }
+                                // הצגה דינמית של אפשרויות התפריט
+                                if (!loggedInUser.isRecruiter()) {
+                                    System.out.println("3. הגשת מועמדות למשרה");
+                                } else {
+                                    System.out.println("3. פרסום משרה חדשה");
+                                    System.out.println("4. צפייה במשרות שלי");
+                                    System.out.println("5. מחיקת משרה");
+                                    System.out.println("6. צפייה במועמדים למשרות שלי");
+                                }
 
-                            System.out.println("6. התנתקות (Logout)");
-                            System.out.println("בחר אפשרות:");
+                                System.out.println("7. התנתקות (Logout)");
+                                System.out.println("בחר אפשרות:");
 
-                            if (!scanner.hasNextInt()) {
-                                System.out.println("שגיאה: יש להזין מספר שלם בלבד.");
-                                scanner.next();
-                                continue;
-                            }
+                                if (!scanner.hasNextInt()) {
+                                    System.out.println("שגיאה: יש להזין מספר שלם בלבד.");
+                                    scanner.next();
+                                    continue;
+                                }
 
-                            int innerChoice = scanner.nextInt();
-                            scanner.nextLine(); // ניקוי ה-Buffer
+                                int innerChoice = scanner.nextInt();
+                                scanner.nextLine(); // ניקוי ה-Buffer
 
-                            switch (innerChoice) {
-                                case 1:
-                                    printAllJobs();
-                                    break;
-                                case 2:
-                                    searchJobs();
-                                    break;
-                                case 3:
-                                    if (loggedInUser.isRecruiter()) {
-                                        addNewJob(loggedInUser);
-                                    } else {
-                                        System.out.println("שגיאה: פעולה זו מותרת למגייסים בלבד.");
-                                    }
-                                    break;
-                                case 4:
-                                    if (loggedInUser.isRecruiter()) {
-                                        printUserJobs(loggedInUser);
-                                    } else {
-                                        System.out.println("שגיאה: פעולה זו מותרת למגייסים בלבד.");
-                                    }
-                                    break;
-                                case 5:
-                                    if (loggedInUser.isRecruiter()) {
-                                        removeJob(loggedInUser);
-                                    } else {
-                                        System.out.println("שגיאה: פעולה זו מותרת למגייסים בלבד.");
-                                    }
-                                    break;
-                                case 6:
-                                    System.out.println("התנתקת בהצלחה מהחשבון.");
-                                    loggedInUser = null; // שבירת הלולאה הפנימית וחזרה לתפריט הראשי
-                                    break;
-                                default:
-                                    System.out.println("בחירה שגויה, אנא נסה שוב.");
-                                    break;
+                                switch (innerChoice) {
+                                    case 1:
+                                        printAllJobs();
+                                        break;
+                                    case 2:
+                                        searchJobs();
+                                        break;
+                                    case 3:
+                                        // ניתוב דינמי: מגייסים מפרסמים משרה, מחפשי עבודה מגישים מועמדות
+                                        if (loggedInUser.isRecruiter()) {
+                                            addNewJob(loggedInUser);
+                                        } else {
+                                            applyForJob(loggedInUser);
+                                        }
+                                        break;
+                                    case 4:
+                                        if (loggedInUser.isRecruiter()) {
+                                            printUserJobs(loggedInUser);
+                                        } else {
+                                            System.out.println("שגיאה: פעולה זו מותרת למגייסים בלבד.");
+                                        }
+                                        break;
+                                    case 5:
+                                        if (loggedInUser.isRecruiter()) {
+                                            removeJob(loggedInUser);
+                                        } else {
+                                            System.out.println("שגיאה: פעולה זו מותרת למגייסים בלבד.");
+                                        }
+                                        break;
+                                    case 6:
+                                        if (loggedInUser.isRecruiter()) {
+                                            viewMyApplicants(loggedInUser);
+                                        } else {
+                                            System.out.println("שגיאה: פעולה זו מותרת למגייסים בלבד.");
+                                        }
+                                        break;
+                                    case 7:
+                                        System.out.println("התנתקת בהצלחה מהחשבון.");
+                                        loggedInUser = null; // שבירת הלולאה הפנימית וחזרה לתפריט הראשי
+                                        break;
+                                    default:
+                                        System.out.println("בחירה שגויה, אנא נסה שוב.");
+                                        break;
+                                }
                             }
                         }
-                    }
-                    break;
+                        break;
 
-                case 3:
-                    System.out.println("תודה שהשתמשת בלוח הדרושים, להתראות!");
-                    running = false;
-                    break;
+                    case 3:
+                        System.out.println("תודה שהשתמשת בלוח הדרושים, להתראות!");
+                        running = false;
+                        break;
 
-                default:
-                    System.out.println("בחירה שגויה, אנא בחר מספר מהתפריט (1-3).");
-                    break;
+                    default:
+                        System.out.println("בחירה שגויה, אנא בחר מספר מהתפריט (1-3).");
+                        break;
+                }
             }
         }
-    }
 
     // --- רישום משתמש חדש במערכת אינטראקטיבי (REQ-001) ---
     // --- רישום משתמש חדש במערכת אינטראקטיבי (REQ-001) ---
