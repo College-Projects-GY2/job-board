@@ -9,6 +9,9 @@ public class JobBoard {
     private int companyCount;
     private int jobCount;
 
+    // הגדרת סקאנר אחד ויחיד ברמת המחלקה (תיקון הבאג)
+    private Scanner scanner;
+
     public JobBoard() {
         this.users = new User[100];
         this.companies = new Company[50];
@@ -17,6 +20,9 @@ public class JobBoard {
         this.userCount = 0;
         this.companyCount = 0;
         this.jobCount = 0;
+
+        // אתחול הסקאנר פעם אחת בלבד
+        this.scanner = new Scanner(System.in);
 
         loadMockData();
     }
@@ -97,7 +103,6 @@ public class JobBoard {
     }
 
     public void start() {
-        Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
         while (running) {
@@ -218,7 +223,6 @@ public class JobBoard {
             return;
         }
 
-        Scanner scanner = new Scanner(System.in);
         String username, password, email, phone;
         boolean isRecruiter = false;
 
@@ -295,8 +299,6 @@ public class JobBoard {
     }
 
     public User login() {
-        Scanner scanner = new Scanner(System.in);
-
         System.out.println("--- התחברות למערכת ---");
         System.out.print("הזן שם משתמש: ");
         String inputUsername = scanner.nextLine().trim();
@@ -332,7 +334,6 @@ public class JobBoard {
             return;
         }
 
-        Scanner scanner = new Scanner(System.in);
         Company selectedCompany = null;
 
         while (selectedCompany == null) {
@@ -370,7 +371,6 @@ public class JobBoard {
         }
 
         printUserJobs(currentUser);
-        Scanner scanner = new Scanner(System.in);
         System.out.println("\n--- מחיקת משרה ---");
         System.out.println("הזן את כותרת המשרה שברצונך למחוק מתוך הרשימה המוצגת:");
         String targetTitle = scanner.nextLine().trim();
@@ -416,8 +416,6 @@ public class JobBoard {
     }
 
     public Job[] searchJobs() {
-        Scanner scanner = new Scanner(System.in);
-
         System.out.println("--- חיפוש משרות מתקדם ---");
         System.out.println("(הקש -999 בכל שלב כדי לדלג על סינון מסוים)");
 
@@ -500,7 +498,6 @@ public class JobBoard {
         }
 
         printAllJobs();
-        Scanner scanner = new Scanner(System.in);
         System.out.println("\n--- הגשת מועמדות למשרה ---");
         System.out.println("הזן את כותרת המשרה אליה תרצה להגיש מועמדות מתוך הרשימה:");
         String targetTitle = scanner.nextLine().trim();
@@ -539,7 +536,6 @@ public class JobBoard {
         }
 
         printUserJobs(recruiter);
-        Scanner scanner = new Scanner(System.in);
         System.out.println("\n--- צפייה במועמדים ---");
         System.out.println("הזן את כותרת המשרה שעבורה תרצה לראות את המועמדים:");
         String targetTitle = scanner.nextLine().trim();
