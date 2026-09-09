@@ -77,14 +77,42 @@ public class Job {
         return company;
     }
 
+    // --- החזרת ה-Setters של השותף (תיקון הערת הבודק) ---
+
     public void setOpen(boolean open) {
         isOpen = open;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
+
+    public void setFullTime(boolean fullTime) {
+        isFullTime = fullTime;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public void setPublisher(User publisher) {
+        this.publisher = publisher;
+    }
+
+    // --- החזרת עיצוב בלוק ההדפסה של השותף (תיקון הערת הבודק) ---
     @Override
     public String toString() {
         String status = isOpen ? "פתוחה" : "סגורה";
         String type = isFullTime ? "מלאה" : "חלקית";
-        return "משרה: " + title + " | חברה: " + company.getName() + " | שכר: " + salary + " | סוג: " + type + " | סטטוס: " + status;
+        return "משרה: " + title + "\n" +
+                "חברה: " + company.getName() + "\n" +
+                "שכר: " + salary + "\n" +
+                "סוג: " + type + "\n" +
+                "סטטוס: " + status + "\n" +
+                "פורסם על ידי: " + publisher.getUsername() + "\n";
     }
 }
